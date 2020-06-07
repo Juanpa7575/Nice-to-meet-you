@@ -23,6 +23,7 @@ $(function () {
           $('#nickWrap').hide();
           $('#frame').show();
           $('#message').focus();
+         
         } else {
           $nickError.html(`
             <div class="alert alert-danger">
@@ -43,8 +44,10 @@ $(function () {
     });
 
     socket.on('new message', data => {
-      displayMsg(data);
-      $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+      if(data.msg != ""){
+        displayMsg(data);
+        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+      }
     });
 
     socket.on('usernames', data => {
@@ -67,8 +70,6 @@ $(function () {
     });
 
     function displayMsg(data) {
-        console.log(data.nick);
-        console.log($nickname.val());
         if(data.nick == $nickname.val()){
             $chat.append(`
                 <ul>

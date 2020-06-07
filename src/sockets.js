@@ -8,8 +8,6 @@ module.exports = io => {
 
     let messages = await Chat.find({}).limit(8).sort('-created');
 
-    socket.emit('load old msgs', messages);
-
     socket.on('new user', (data, cb) => {
       if (data in users) {
         cb(false);
@@ -19,6 +17,7 @@ module.exports = io => {
         users[socket.nickname] = socket;
         updateNicknames();
       }
+      socket.emit('load old msgs', messages);
     });
 
     // receive a message a broadcasting
