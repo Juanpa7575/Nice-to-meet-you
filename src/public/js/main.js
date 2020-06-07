@@ -36,18 +36,21 @@ $(function () {
 
     // events
     $messageForm.submit( e => {
-      e.preventDefault();
-      socket.emit('send message', $messageBox.val(), data => {
-        $chat.append(`<p class="error">${data}</p>`)
-      });
-      $messageBox.val('');
+      
+        e.preventDefault();
+        if($messageBox.val() != ""){
+        socket.emit('send message', $messageBox.val(), data => {
+          $chat.append(`<p class="error">${data}</p>`)
+        });
+      }
+        $messageBox.val('');
+      
+
     });
 
     socket.on('new message', data => {
-      if(data.msg != ""){
         displayMsg(data);
         $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
-      }
     });
 
     socket.on('usernames', data => {
