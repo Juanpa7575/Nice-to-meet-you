@@ -1,11 +1,11 @@
 {
-  "name": "chat-fullstack-javascript",
+  "name": "nice-to-meet-you",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon ./src"
+    "dev": "nodemon ./src",
+    "start": "node ./src"
   },
   "keywords": [],
   "author": "",
