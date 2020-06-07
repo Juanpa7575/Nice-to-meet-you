@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class=''>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+    <!------ Importando ---------->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet'
+        type='text/css'>
+    <link rel='stylesheet prefetch'
+        href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+
+    <!------ CSS para quitar los css puestos por defecto por el navegador ---------->
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+
+    <!------ CSS personal---------->
+    <link rel="stylesheet" href="./css/style.css">
+
+</head>
+
+<body>
+
+    <div class="container p-4">
+    <!-- Div de inicio de sesion -->
+        <div id="nickWrap">
+            <div class="row">
+                <div class="col-md-4 mx-auto">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Nombre de usuario</h3>
+                        </div>
+                        <p id="nickError"></p>
+                        <div class="card-body">
+                            <form id="nickForm">
+                                <input id="nickname" type="text" class="form-control" autofocus />
+                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Iniciar chat" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+
+    <div id="frame">
+        <div id="sidepanel">
+            <div id="profile">
+                <div class="wrap">
+                    <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
+                    <p>Mike Ross</p>
+                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                    <div id="status-options">
+                        <ul>
+                            <li id="status-online" class="active"><span class="status-circle"></span>
+                                <p>Online</p>
+                            </li>
+                            <li id="status-away"><span class="status-circle"></span>
+                                <p>Away</p>
+                            </li>
+                            <li id="status-busy"><span class="status-circle"></span>
+                                <p>Busy</p>
+                            </li>
+                            <li id="status-offline"><span class="status-circle"></span>
+                                <p>Offline</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="expanded">
+                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mikeross" />
+                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="ross81" />
+                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mike.ross" />
+                    </div>
+                </div>
+            </div>
+            <div id="search">
+                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+                <input type="text" placeholder="Search contacts..." />
+            </div>
+            <div id="contacts">
+                <ul>
+                    <li class="contact">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="https://cdn.shopify.com/s/files/1/1803/7259/products/trek-light-mystery-blanket-question_1024x.jpg?v=1568997572"
+                                alt="" />
+                            <div class="meta">
+                                <p class="name">Random</p>
+                                <p class="preview">Click here!!</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="contact">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name">User 1</p>
+                                <p class="preview">What are you doing?</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="contact active">
+                        <div class="wrap">
+                            <span class="contact-status busy"></span>
+                            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                            <div class="meta">
+                                <p class="name">User 2</p>
+                                <p class="preview">Hello, how are you?</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="bottom-bar">
+                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add
+                        contact</span></button>
+                <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="contact-profile">
+                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                <p>User2</p>
+                <div class="social-media">
+
+                </div>
+            </div>
+            <div id="messages">
+                <ul>
+                    <li class="replies">
+                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                        <p>Hello, how are you?.</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="message-input">
+                <div class="wrap">
+                    <form id="message-form">
+                        <input autocomplete="off" type="text" id="message" placeholder="Write your message..." />
+                        <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                        <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
