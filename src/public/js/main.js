@@ -1,25 +1,34 @@
+
+Notification.requestPermission();
+
+//variables
+let $username;
+let unfocus = false;
+
 $(function () {
 
-    // socket.io client side connection
+    // socket.io cliente
     const socket = io.connect();
 
-    // obtaining DOM elements from the Chat Interface
+    // Obtenemos los elementos de la interfaz de mensajes
     const $messageForm = $('#message-form');
     const $messageBox = $('#message');
     const $chat = $('#messages');
 
-    // obtaining DOM elements from the NicknameForm Interface
+    // Obtenemos los elementos del inicio de sesion
     const $nickForm = $('#nickForm');
     const $nickError = $('#nickError');
     const $nickname = $('#nickname');
 
-    // obtaining the usernames container DOM
+    // Obtenemos la ubicacion para los nombres de usaurio
     const $users = $('#usernames');
 
+    //inicio de sesion en Sockets
     $nickForm.submit(e => {
       e.preventDefault();
       socket.emit('new user', $nickname.val(), data => {
         if(data) {
+          $username = $nickname.val();
           $('#nickWrap').hide();
           $('#frame').show();
           $('#message').focus();
@@ -34,46 +43,64 @@ $(function () {
       });
     });
 
-    // events
+    //Eventos
     $messageForm.submit( e => {
-      
         e.preventDefault();
         if($messageBox.val() != ""){
-        socket.emit('send message', $messageBox.val(), data => {
+        socket.emit('send message', $messageBox.val(), $username, data => {
           $chat.append(`<p class="error">${data}</p>`)
         });
       }
         $messageBox.val('');
-      
-
     });
 
+    //escucahr un nuevo mensaje
     socket.on('new message', data => {
         displayMsg(data);
+        notificacion(data);
         $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
     });
 
+    //Listar usuarios activos
     socket.on('usernames', data => {
       let html = '';
       for(i = 0; i < data.length; i++) {
-        html += `
-        <li class="contact">
-            <div class="wrap">
-                <span class="contact-status online"></span>
-                <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
-                <div class="meta">
-                    <p class="name">${data[i]}</p>
-                    <p class="preview">Chat with me!!</p>
+
+        if(data[i] == $nickname){
+            console.log("ya?");
+            
+        }else{
+            html += `
+            <li class="contact">
+                <div class="wrap">
+                    <span class="contact-status online"></span>
+                    <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
+                    <div class="meta">
+                        <p class="name">${data[i]}</p>
+                        <p class="preview">Chat with me!!</p>
+                    </div>
                 </div>
-            </div>
-        </li>
-        `; 
+            </li>
+            `; 
+        }
+        
       }
       $users.html(html);
     });
     
     socket.on('whisper', data => {
-      $chat.append(`<p class="whisper"><b>${data.nick}</b>: ${data.msg}</p>`);
+      $chat.append(`
+      <li class="contact">
+            <div class="wrap">
+                <span class="contact-status online"></span>
+                <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
+                <div class="meta">
+                    <p class="name whisper">${data[i]}</p>
+                    <p class="preview">Chat with me!!</p>
+                </div>
+            </div>
+        </li>
+        `);
     });
 
     socket.on('load old msgs', msgs => {
@@ -105,11 +132,38 @@ $(function () {
         }
        
     }
+
+    //Comprobar si la ventana se encuentra activa
+    document.addEventListener('visibilitychange', function(){
+        unfocus = document.hidden;
+        //reacctivar sesion
+        if(unfocus == true){
+            socket.emit('reconnect', $username, data => {
+                
+            });
+        }
+    })
+
+    function notificacion(data){
+
+        if(unfocus == true){
+
+            var title = data.nick
+            var extra = {
+    
+            icon: "http://xitrus.es/imgs/logo_claro.png",
+            body: data.msg
+    
+            }
+            new Notification( title, extra)
+
+        }
+    
+    }
+
 });
 
-
-$("#messages").animate({ scrollTop: $(document).height() }, "fast");
-
+//Script de apariencia
 $("#profile-img").click(function () {
     $("#status-options").toggleClass("active");
 });
@@ -141,33 +195,3 @@ $("#status-options ul li").click(function () {
 
     $("#status-options").removeClass("active");
 });
-
-/*
-function newMessage() {
-
-    message = $(".message-input input").val();
-
-    if ($.trim(message) == '') {
-        return false;
-    }
-
-    $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('#messages ul'));
-    $('.message-input input').val(null);
-    $('.contact.active .preview').html('<span>You: </span>' + message);
-    $('#messages').animate({ scrollTop: docHeight + 93 }, "fast");
-    $('#messages').animate({ scrollTop: $('#panelChat')[0].scrollHeight }, 1000);
-
-    docHeight += 93;
-
-}
-$('.submit').click(function () {
-    newMessage();
-});
-
-$(window).on('keydown', function (e) {
-    if (e.which == 13) {
-        newMessage();
-        return false;
-    }
-});
-//# sourceURL=pen.js */
