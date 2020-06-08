@@ -6,7 +6,7 @@ module.exports = io => {
 
   io.on('connection', async socket => {
 
-    let messages = await Chat.find({}).limit(8).sort('-created');
+    let messages = await Chat.find({}).limit(10).sort('-created');
 
     socket.on('new user', (data, cb) => {
       if (data in users) {

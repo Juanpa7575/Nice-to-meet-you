@@ -84,6 +84,18 @@
             </div>
             <div id="contacts">
                 <ul>
+                    <li class="contact active">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Earth_Eastern_Hemisphere.jpg"
+                                alt="" />
+                            <div class="meta">
+                                <p class="name">Global chat</p>
+                                <p class="preview">Click here!!</p>
+                            </div>
+                        </div>
+                    </li>
+
                     <li class="contact">
                         <div class="wrap">
                             <span class="contact-status online"></span>
@@ -95,58 +107,50 @@
                             </div>
                         </div>
                     </li>
-                    <li class="contact">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name">User 1</p>
-                                <p class="preview">What are you doing?</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="contact active">
-                        <div class="wrap">
-                            <span class="contact-status busy"></span>
-                            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                            <div class="meta">
-                                <p class="name">User 2</p>
-                                <p class="preview">Hello, how are you?</p>
-                            </div>
-                        </div>
-                    </li>
+
+                    <!-- Usuarios activos -->
+                    <div id="usernames">
+                        
+                    </div>
+
                 </ul>
             </div>
+
+            <!-- Configuraciones y nuevo usuario -->
             <div id="bottom-bar">
-                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add
-                        contact</span></button>
+                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
+
         <div class="content">
+
+            <!-- Informacion del usuario con el que hablo -->
             <div class="contact-profile">
-                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                <p>User2</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Earth_Eastern_Hemisphere.jpg" alt="" />
+                <p>Talk to everybody</p>
                 <div class="social-media">
 
                 </div>
             </div>
+
+            <!-- Mesajes nuevos -->
             <div id="messages">
-               <!-- Mesajes nuevos -->
             </div>
 
+            <!-- Ingresar nuevos mensajes -->
             <div class="message-input">
                 <div class="wrap">
                     <form id="message-form">
                         <input autocomplete="off" type="text" id="message" placeholder="Write your message..." />
                         <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
                         <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    </form>
                 </div>
-                </form>
             </div>
+
         </div>
 
-    </div>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
