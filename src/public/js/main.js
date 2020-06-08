@@ -174,7 +174,7 @@ $(function () {
                 body: data.msg
             }
             var noti = new Notification(title, extra)
-            setTimeout( function() { noti.close() }, 2000)
+            setTimeout( function() { noti.close() }, 5000)
         }
     }
 
