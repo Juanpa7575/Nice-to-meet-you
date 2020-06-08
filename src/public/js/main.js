@@ -88,7 +88,7 @@ $(function () {
             $chat.append(`
                 <ul>
                     <li class="replies">
-                        <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
+                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
                         <p>${data.nick} : ${data.msg}</p>
                     </li>
                 </ul>`
@@ -97,7 +97,7 @@ $(function () {
             $chat.append(`
                 <ul>
                     <li class="sent">
-                        <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
+                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
                         <p>${data.nick} : ${data.msg}</p>
                     </li>
                 </ul>`
