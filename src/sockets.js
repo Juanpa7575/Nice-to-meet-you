@@ -9,6 +9,7 @@ module.exports = io => {
 
         let messages = await Chat.find({}).limit(10).sort('-created');
 
+        // Add usuario a la sesion
         socket.on('new user', (data, cb) => {
             if (data in users) {
                 cb(false);
@@ -22,12 +23,16 @@ module.exports = io => {
         });
 
         //reactive session
-        socket.on('reconnect', (data, cb) => {
+        socket.on('reconnect', async(user, cb)  => {
+            console.log(user);
             if(socket.nickname === undefined){
-                console.log(data);
-                socket.nickname = data;
+                console.log(user);
+                socket.nickname = user;
                 users[socket.nickname] = socket;
                 updateNicknames();
+                cb(true);
+            }else{
+                cb(false);
             }
         });
 
@@ -36,7 +41,6 @@ module.exports = io => {
             var msg = data.trim();
 
             if(socket.nickname === undefined){
-                console.log(user);
                 socket.nickname = user;
                 users[socket.nickname] = socket;
                 updateNicknames();
@@ -47,9 +51,14 @@ module.exports = io => {
                 var index = msg.indexOf(' ');
                 if (index !== -1) {
                     var name = msg.substring(0, index);
+                    console.log(name);
                     var msg = msg.substring(index + 1);
                     if (name in users) {
                         users[name].emit('whisper', {
+                            msg,
+                            nick: socket.nickname
+                        });
+                        users[socket.nickname].emit('whisper', {
                             msg,
                             nick: socket.nickname
                         });

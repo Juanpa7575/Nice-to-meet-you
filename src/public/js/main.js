@@ -1,5 +1,6 @@
 
 Notification.requestPermission();
+$('<audio id="chatAudio"><source src="./audio/notify.ogg" type="audio/ogg"><source src="./audio/notify.mp3" type="audio/mpeg"><source src="./audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
 
 //variables
 let $username;
@@ -20,6 +21,11 @@ $(function () {
     const $nickError = $('#nickError');
     const $nickname = $('#nickname');
 
+    // Obtenemos los elementos de la informacion del usuario
+    const $nickuser = $('#profile-name');
+    const $imguser = $('#profile-img');
+    //const $nickname = $('#nickname');
+
     // Obtenemos la ubicacion para los nombres de usaurio
     const $users = $('#usernames');
 
@@ -32,7 +38,9 @@ $(function () {
           $('#nickWrap').hide();
           $('#frame').show();
           $('#message').focus();
-         
+          $nickuser.text($username);
+          $imguser.attr("src","./img/alt-user/"+$username.charAt(0).toUpperCase()+".png"); 
+          progressbar();        
         } else {
           $nickError.html(`
             <div class="alert alert-danger">
@@ -43,7 +51,8 @@ $(function () {
       });
     });
 
-    //Eventos
+    //------------------------------------------------Eventos----------------------------------------------------
+    //Enviar mensajes
     $messageForm.submit( e => {
         e.preventDefault();
         if($messageBox.val() != ""){
@@ -54,10 +63,24 @@ $(function () {
         $messageBox.val('');
     });
 
+    //Comprobar si la ventana se encuentra activa
+    document.addEventListener('visibilitychange', function(){
+        if (document.hidden) {
+            console.log('bye');
+        } else {
+            console.log('well back');
+            socket.emit('reconnect', $username, data => {
+                $chat.append(`<p class="error">${data}</p>`)
+            });
+        }
+        unfocus = document.hidden;
+    })
+
+    //-------------------------------------------------------------------------------------------------------------
     //escucahr un nuevo mensaje
     socket.on('new message', data => {
-        displayMsg(data);
         notificacion(data);
+        displayMsg(data);
         $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
     });
 
@@ -65,10 +88,7 @@ $(function () {
     socket.on('usernames', data => {
       let html = '';
       for(i = 0; i < data.length; i++) {
-
-        if(data[i] == $nickname){
-            console.log("ya?");
-            
+        if(data[i] == $username){
         }else{
             html += `
             <li class="contact">
@@ -88,21 +108,31 @@ $(function () {
       $users.html(html);
     });
     
+    //Mesajes privados en grupo
     socket.on('whisper', data => {
-      $chat.append(`
-      <li class="contact">
-            <div class="wrap">
-                <span class="contact-status online"></span>
-                <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
-                <div class="meta">
-                    <p class="name whisper">${data[i]}</p>
-                    <p class="preview">Chat with me!!</p>
-                </div>
-            </div>
-        </li>
-        `);
+        if(data.nick == $username){
+            $chat.append(`
+                <ul>
+                    <li class="whisper-replies">
+                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
+                        <p><strong>Private from ${data.nick} : </strong>${data.msg}</p>
+                    </li>
+                </ul>`
+            );
+        }else{
+            $chat.append(`
+                <ul>
+                    <li class="whisper-sent">
+                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
+                        <p><strong>Private from ${data.nick} : </strong>${data.msg}</p>
+                    </li>
+                </ul>`
+            );
+        }
+        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
     });
 
+    //Cargar mensajes antiguos
     socket.on('load old msgs', msgs => {
       for(let i = msgs.length -1; i >=0 ; i--) {
         displayMsg(msgs[i]);
@@ -110,13 +140,15 @@ $(function () {
       $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
     });
 
+    //--------------------------------------------------------------------------------------------------------------
+    //Mostrar mensajes
     function displayMsg(data) {
-        if(data.nick == $nickname.val()){
+        if(data.nick == $username){
             $chat.append(`
                 <ul>
                     <li class="replies">
                         <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
-                        <p>${data.nick} : ${data.msg}</p>
+                        <p><strong>${data.nick} :</strong> ${data.msg}</p>
                     </li>
                 </ul>`
             );
@@ -125,45 +157,47 @@ $(function () {
                 <ul>
                     <li class="sent">
                         <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
-                        <p>${data.nick} : ${data.msg}</p>
+                        <p><strong>${data.nick} : </strong>${data.msg}</p>
                     </li>
                 </ul>`
             );
         }
-       
     }
 
-    //Comprobar si la ventana se encuentra activa
-    document.addEventListener('visibilitychange', function(){
-        unfocus = document.hidden;
-        //reacctivar sesion
-        if(unfocus == true){
-            socket.emit('reconnect', $username, data => {
-                
-            });
-        }
-    })
-
+    //Si la ventana esat inectiva ejecutar notificacions
     function notificacion(data){
-
         if(unfocus == true){
-
+            $('#chatAudio')[0].play();
             var title = data.nick
             var extra = {
-    
-            icon: "http://xitrus.es/imgs/logo_claro.png",
-            body: data.msg
-    
+                icon: "https://stackoverrun.com/src/images/fivicon.png",
+                body: data.msg
             }
-            new Notification( title, extra)
-
+            var noti = new Notification(title, extra)
+            setTimeout( function() { noti.close() }, 2000)
         }
-    
     }
 
 });
 
-//Script de apariencia
+//----------------------------------------------Script de apariencia--------------------------------------------------
+
+//Barra prograsiva
+function progressbar() {
+    var current_progress = 0;
+    var interval = setInterval(function() {
+        current_progress += 10;
+        $("#dynamic")
+        .css("width", current_progress + "%")
+        .attr("aria-valuenow", current_progress)
+        .text(current_progress + "%");
+        if (current_progress >= 100)
+            clearInterval(interval);
+        }
+    , 1000);
+  };
+
+//Diseño de menus
 $("#profile-img").click(function () {
     $("#status-options").toggleClass("active");
 });
