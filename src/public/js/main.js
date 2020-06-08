@@ -56,7 +56,18 @@ $(function () {
     socket.on('usernames', data => {
       let html = '';
       for(i = 0; i < data.length; i++) {
-        html += `<p><i class="fas fa-user"></i> ${data[i]}</p>`; 
+        html += `
+        <li class="contact">
+            <div class="wrap">
+                <span class="contact-status online"></span>
+                <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
+                <div class="meta">
+                    <p class="name">${data[i]}</p>
+                    <p class="preview">Chat with me!!</p>
+                </div>
+            </div>
+        </li>
+        `; 
       }
       $users.html(html);
     });
@@ -77,7 +88,7 @@ $(function () {
             $chat.append(`
                 <ul>
                     <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+                        <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
                         <p>${data.nick} : ${data.msg}</p>
                     </li>
                 </ul>`
@@ -86,7 +97,7 @@ $(function () {
             $chat.append(`
                 <ul>
                     <li class="sent">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                        <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
                         <p>${data.nick} : ${data.msg}</p>
                     </li>
                 </ul>`
