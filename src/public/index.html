@@ -31,27 +31,41 @@
         <div id="nickWrap">
             <div class="row">
                 <div class="col-md-4 mx-auto">
-                    <div class="card">
+
+                    <div id="signIn" class="card">
                         <div class="card-header">
-                            <h3 id="logTitle">Log in</h3>
+                            <h3 id="logTitle">Sign in</h3>
                         </div>
                         <p id="nickError"></p>
                         <div class="card-body">
                             <form id="nickForm">
-                                <input required minlength="1" id="nickname" type="text" class="form-control" autofocus placeholder="name" />
-                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Iniciar chat" placeholder="password/>
-                            </form>
-                            <form class="nickRegister">
-                                <input required minlength="1" id="newname" type="text" class="form-control"/>
-                                <input required minlength="1" id="newpass" type="text" class="form-control"/>
-                                <input required minlength="1" id="newphone" type="text" class="form-control"/>
-                                <input required minlength="1" id="newnickname" type="text" class="form-control"/>
-                                <input required minlength="1" id="newpass" type="text" class="form-control"/>
-                                <button>create</button>
+                                <input required minlength="1" id="nickname" type="text" class="form-control" autofocus placeholder="User" /><br>
+                                <input required minlength="1" id="pass" type="password" class="form-control" autofocus placeholder="Password" />
+                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Start chat"/>
                             </form>
                         </div>
                         <div class="card-footer">
-                            <p class="message">Already registered? <a href="#">Sign In</a></p>
+                            <p id="signInToggle" class="message">Not registered? <a href="#">Create an account</a></p>
+                        </div>
+                    </div>
+
+                    <div id="signUp" class="card">
+                        <div class="card-header">
+                            <h3 id="logTitle">Create an account</h3>
+                        </div>
+                        <p id="nickError2"></p>
+                        <div class="card-body">
+                            <form id="nickRegisterForm">
+                                <input required minlength="1" id="newname" type="text" class="form-control" placeholder="Name" /><br>
+                                <input required minlength="6" id="newemail" type="email" class="form-control" placeholder="Email" /><br>
+                                <input required minlength="1" id="newnickname" type="text" class="form-control" placeholder="User" /><br>
+                                <input required minlength="1" id="newpass" type="password" class="form-control" placeholder="Password" /><br>
+                                <input required minlength="1" id="newpass2" type="password" class="form-control" placeholder="Comprobar Password" /><br>
+                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Create new user" />
+                            </form> 
+                        </div>
+                        <div class="card-footer">
+                            <p id="signUpToggle" class="message">Already registered? <a href="#">Sign In</a></p>
                         </div>
                     </div>
                 </div>

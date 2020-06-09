@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://Jurno:2981@cluster0-ny2ec.mongodb.net/<dbname>?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://Jurno:2981@n2mu-cl-yimem.mongodb.net/n2mu-db?retryWrites=true&w=majority', {
     useNewUrlParser: true
 })
   .then(db => console.log('db connected'))

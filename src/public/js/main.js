@@ -20,6 +20,16 @@ $(function () {
     const $nickForm = $('#nickForm');
     const $nickError = $('#nickError');
     const $nickname = $('#nickname');
+    const $pass = $('#pass');
+
+    //Obtenemos los elementos para registrar un nuevo usuario
+    const $nickRegisterForm = $('#nickRegisterForm');
+    const $nickError2 = $('#nickError2');
+    const $newname = $('#newname')
+    const $newemail = $('#newemail')
+    const $newnickname = $('#newnickname')
+    const $newpass = $('#newpass')
+    const $newpass2 = $('#newpass2')
 
     // Obtenemos los elementos de la informacion del usuario
     const $nickuser = $('#profile-name');
@@ -31,40 +41,79 @@ $(function () {
 
     //inicio de sesion en Sockets
     $nickForm.submit(e => {
-      e.preventDefault();
-      socket.emit('new user', $nickname.val(), data => {
-        if(data) {
-          $username = $nickname.val();
-          $('#nickWrap').hide();
-          $('#frame').show();
-          $('#message').focus();
-          $nickuser.text($username);
-          $imguser.attr("src","./img/alt-user/"+$username.charAt(0).toUpperCase()+".png"); 
-          progressbar();        
-        } else {
-          $nickError.html(`
-            <div class="alert alert-danger">
-              That username already Exists.
-            </div>
-          `);
+        e.preventDefault();
+        const $userinfo = {
+            nick: $nickname.val(),
+            pass: $pass.val(),
         }
-      });
+        socket.emit('new user', $userinfo, data => {
+            if (data) {
+                $username = $nickname.val();
+                $('#nickWrap').hide();
+                $('#frame').show();
+                $('#message').focus();
+                $nickuser.text($username);
+                $imguser.attr("src", "./img/alt-user/" + $username.charAt(0).toUpperCase() + ".png");
+                progressbar();
+            } else {
+                $nickError.html(`
+                <div class="alert alert-danger">
+                The user or pass are wrong.
+                </div>
+                `);
+            }
+        });
+    });
+
+    //Registrar nuevo usuario e iniciar chat
+    $nickRegisterForm.submit(e => {
+        e.preventDefault();
+
+        if ($newpass.val() == $newpass2.val()){
+            const $userinfo = {
+                name: $newname.val(),
+                email: $newemail.val(),
+                nick: $newnickname.val(),
+                pass: $newpass.val(),
+                avatar: $newnickname.val().charAt(0).toUpperCase()
+            }
+    
+            console.log($userinfo);
+    
+            socket.emit('create user', $userinfo, data => {
+                if (data) {
+                    $username = $nickname.val();
+                    $('#nickWrap').hide();
+                    $('#frame').show();
+                    $('#message').focus();
+                    $nickuser.text($username);
+                    $imguser.attr("src", "./img/alt-user/" + $userinfo + ".png");
+                    progressbar();
+                } else {
+                    $nickError2.html(`
+                <div class="alert alert-danger">
+                    That username already Exists.
+                </div>
+                `);
+                }
+            });
+        }
     });
 
     //------------------------------------------------Eventos----------------------------------------------------
     //Enviar mensajes
-    $messageForm.submit( e => {
+    $messageForm.submit(e => {
         e.preventDefault();
-        if($messageBox.val() != ""){
-        socket.emit('send message', $messageBox.val(), $username, data => {
-          $chat.append(`<p class="error">${data}</p>`)
-        });
-      }
+        if ($messageBox.val() != "") {
+            socket.emit('send message', $messageBox.val(), $username, data => {
+                $chat.append(`<p class="error">${data}</p>`)
+            });
+        }
         $messageBox.val('');
     });
 
     //Comprobar si la ventana se encuentra activa
-    document.addEventListener('visibilitychange', function(){
+    document.addEventListener('visibilitychange', function () {
         if (document.hidden) {
             console.log('bye');
         } else {
@@ -81,36 +130,38 @@ $(function () {
     socket.on('new message', data => {
         notificacion(data);
         displayMsg(data);
-        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
     });
 
     //Listar usuarios activos
     socket.on('usernames', data => {
-      let html = '';
-      for(i = 0; i < data.length; i++) {
-        if(data[i] == $username){
-        }else{
-            html += `
-            <li class="contact">
-                <div class="wrap">
-                    <span class="contact-status online"></span>
-                    <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
-                    <div class="meta">
-                        <p class="name">${data[i]}</p>
-                        <p class="preview">Chat with me!!</p>
-                    </div>
+        let html = '';
+        for (i = 0; i < data.length; i++) {
+            if (data[i] == $username) {
+            } else {
+                html += `
+                <div id="${data[i]}">
+                    <li class="contact">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
+                            <div class="meta">
+                                <p class="name">${data[i]}</p>
+                                <p class="preview">Chat with me!!</p>
+                            </div>
+                        </div>
+                    </li>
                 </div>
-            </li>
-            `; 
+            `;
+            }
+
         }
-        
-      }
-      $users.html(html);
+        $users.html(html);
     });
-    
+
     //Mesajes privados en grupo
     socket.on('whisper', data => {
-        if(data.nick == $username){
+        if (data.nick == $username) {
             $chat.append(`
                 <ul>
                     <li class="whisper-replies">
@@ -119,7 +170,7 @@ $(function () {
                     </li>
                 </ul>`
             );
-        }else{
+        } else {
             $chat.append(`
                 <ul>
                     <li class="whisper-sent">
@@ -129,21 +180,21 @@ $(function () {
                 </ul>`
             );
         }
-        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
     });
 
     //Cargar mensajes antiguos
     socket.on('load old msgs', msgs => {
-      for(let i = msgs.length -1; i >=0 ; i--) {
-        displayMsg(msgs[i]);
-      }
-      $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+        for (let i = msgs.length - 1; i >= 0; i--) {
+            displayMsg(msgs[i]);
+        }
+        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
     });
 
     //--------------------------------------------------------------------------------------------------------------
     //Mostrar mensajes
     function displayMsg(data) {
-        if(data.nick == $username){
+        if (data.nick == $username) {
             $chat.append(`
                 <ul>
                     <li class="replies">
@@ -152,7 +203,7 @@ $(function () {
                     </li>
                 </ul>`
             );
-        }else{
+        } else {
             $chat.append(`
                 <ul>
                     <li class="sent">
@@ -165,8 +216,8 @@ $(function () {
     }
 
     //Si la ventana esat inectiva ejecutar notificacions
-    function notificacion(data){
-        if(unfocus == true){
+    function notificacion(data) {
+        if (unfocus == true) {
             $('#chatAudio')[0].play();
             var title = data.nick
             var extra = {
@@ -174,7 +225,7 @@ $(function () {
                 body: data.msg
             }
             var noti = new Notification(title, extra)
-            setTimeout( function() { noti.close() }, 5000)
+            setTimeout(function () { noti.close() }, 5000)
         }
     }
 
@@ -185,17 +236,27 @@ $(function () {
 //Barra prograsiva
 function progressbar() {
     var current_progress = 0;
-    var interval = setInterval(function() {
+    var interval = setInterval(function () {
         current_progress += 10;
         $("#dynamic")
-        .css("width", current_progress + "%")
-        .attr("aria-valuenow", current_progress)
-        .text(current_progress + "%");
+            .css("width", current_progress + "%")
+            .attr("aria-valuenow", current_progress)
+            .text(current_progress + "%");
         if (current_progress >= 100)
             clearInterval(interval);
-        }
-    , 1000);
-  };
+    }
+        , 1000);
+};
+
+//Mostrar ocultar signUp y signDown
+$("#signInToggle").click(function (event) {
+    $("#signUp").slideToggle();
+    $("#signIn").slideToggle();
+});
+$("#signUpToggle").click(function (event) {
+    $("#signUp").slideToggle();
+    $("#signIn").slideToggle();
+});
 
 //Diseño de menus
 $("#profile-img").click(function () {

@@ -1,4 +1,5 @@
 const Chat = require('./models/Chat');
+const Users = require('./models/Users');
 
 module.exports = io => {
 
@@ -10,15 +11,41 @@ module.exports = io => {
         let messages = await Chat.find({}).limit(10).sort('-created');
 
         // Add usuario a la sesion
-        socket.on('new user', (data, cb) => {
-            if (data in users) {
+        socket.on('new user', async(data, cb) => {
+            let BDusers = await Users.find({"nick":data.nick,"pass":data.pass}).sort('name');
+
+            console.log(BDusers);
+            console.log(BDusers.length);
+            if (BDusers.length == 0) {
                 cb(false);
             } else {
                 cb(true);
-                socket.nickname = data;
+                socket.nickname = data.nick;
                 users[socket.nickname] = socket;
                 updateNicknames();
             }
+            socket.emit('load old msgs', messages);
+        });
+
+        // Create and Add usuario a la sesion
+        socket.on('create user', async(data, cb) => {
+
+            var newUser = new Users({
+                name: data.name,
+                email: data.email,
+                nick: data.nick,
+                pass: data.pass,
+                avatar: data.avatar
+            });
+            await newUser.save();
+
+            console.log(data);
+
+            socket.nickname = data.nick;
+            users[socket.nickname] = socket;
+            updateNicknames();
+            cb(true);
+            
             socket.emit('load old msgs', messages);
         });
 
