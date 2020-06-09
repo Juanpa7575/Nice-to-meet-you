@@ -20,33 +20,46 @@
 
     <!------ CSS personal---------->
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/main.css">
 
 </head>
 
 <body>
 
-    <div class="container p-4">
     <!-- Div de inicio de sesion -->
+    <div class="container p-4"> 
         <div id="nickWrap">
             <div class="row">
                 <div class="col-md-4 mx-auto">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Nombre de usuario</h3>
+                            <h3 id="logTitle">Log in</h3>
                         </div>
                         <p id="nickError"></p>
                         <div class="card-body">
                             <form id="nickForm">
-                                <input required minlength="1" id="nickname" type="text" class="form-control" autofocus />
-                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Iniciar chat" />
+                                <input required minlength="1" id="nickname" type="text" class="form-control" autofocus placeholder="name" />
+                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Iniciar chat" placeholder="password/>
                             </form>
+                            <form class="nickRegister">
+                                <input required minlength="1" id="newname" type="text" class="form-control"/>
+                                <input required minlength="1" id="newpass" type="text" class="form-control"/>
+                                <input required minlength="1" id="newphone" type="text" class="form-control"/>
+                                <input required minlength="1" id="newnickname" type="text" class="form-control"/>
+                                <input required minlength="1" id="newpass" type="text" class="form-control"/>
+                                <button>create</button>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <p class="message">Already registered? <a href="#">Sign In</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div><br>
+    </div>
 
+    <!-- Panel lateral -->
     <div id="frame">
         <div id="sidepanel">
             <div id="profile">
@@ -166,6 +179,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/main.js"></script>
+
 </body>
 
 </html>
