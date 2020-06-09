@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+session_affinity: true
 
 const path = require('path');
 

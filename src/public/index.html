@@ -4,6 +4,8 @@
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link rel="shortcut icon" type="image/png" sizes="256x256" href="https://stackoverrun.com/src/images/fivicon.png">
+    <title>Nice to meet you</title>
 
     <!------ Importando ---------->
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet'
@@ -18,39 +20,52 @@
 
     <!------ CSS personal---------->
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/main.css">
 
 </head>
 
 <body>
 
-    <div class="container p-4">
     <!-- Div de inicio de sesion -->
+    <div class="container p-4"> 
         <div id="nickWrap">
             <div class="row">
                 <div class="col-md-4 mx-auto">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Nombre de usuario</h3>
+                            <h3 id="logTitle">Log in</h3>
                         </div>
                         <p id="nickError"></p>
                         <div class="card-body">
                             <form id="nickForm">
-                                <input id="nickname" type="text" class="form-control" autofocus />
-                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Iniciar chat" />
+                                <input required minlength="1" id="nickname" type="text" class="form-control" autofocus placeholder="name" />
+                                <input type="submit" class="btn btn-primary btn-block mt-2" value="Iniciar chat" placeholder="password/>
                             </form>
+                            <form class="nickRegister">
+                                <input required minlength="1" id="newname" type="text" class="form-control"/>
+                                <input required minlength="1" id="newpass" type="text" class="form-control"/>
+                                <input required minlength="1" id="newphone" type="text" class="form-control"/>
+                                <input required minlength="1" id="newnickname" type="text" class="form-control"/>
+                                <input required minlength="1" id="newpass" type="text" class="form-control"/>
+                                <button>create</button>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <p class="message">Already registered? <a href="#">Sign In</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div><br>
+    </div>
 
+    <!-- Panel lateral -->
     <div id="frame">
         <div id="sidepanel">
             <div id="profile">
                 <div class="wrap">
-                    <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
-                    <p>Mike Ross</p>
+                    <img id="profile-img" src="" class="online" alt="" />
+                    <p id="profile-name"></p>
                     <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
                     <div id="status-options">
                         <ul>
@@ -69,21 +84,38 @@
                         </ul>
                     </div>
                     <div id="expanded">
-                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mikeross" />
-                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="ross81" />
-                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mike.ross" />
+                        <label for="hobby"><i class="fa fa-heart fa-fw" aria-hidden="true"></i></label>
+                        <input name="hobby" type="text" value="Music, Anime, NodeJs" />
+                        <input name="puntaje" type="text" value="" hidden />
+                        <label for="nivel"><i class="fa fa-star fa-fw" aria-hidden="true"></i></label>
+                        <input name="nivel" type="text" value="B1" />
                     </div>
                 </div>
+                <div class="progress">
+                    <div id="dynamic" class="progress-bar progress-bar-sucess progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                      <span id="current-progress"></span>
+                    </div>
+                </div><br>
             </div>
             <div id="search">
                 <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
                 <input type="text" placeholder="Search contacts..." />
             </div>
+            <hr>
             <div id="contacts">
                 <ul>
+                    <li class="contact active">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Earth_Eastern_Hemisphere.jpg"
+                                alt="" />
+                            <div class="meta">
+                                <p class="name">Global chat</p>
+                                <p class="preview">Click here!!</p>
+                            </div>
+                        </div>
+                    </li>
+
                     <li class="contact">
                         <div class="wrap">
                             <span class="contact-status online"></span>
@@ -95,69 +127,59 @@
                             </div>
                         </div>
                     </li>
-                    <li class="contact">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name">User 1</p>
-                                <p class="preview">What are you doing?</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="contact active">
-                        <div class="wrap">
-                            <span class="contact-status busy"></span>
-                            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                            <div class="meta">
-                                <p class="name">User 2</p>
-                                <p class="preview">Hello, how are you?</p>
-                            </div>
-                        </div>
-                    </li>
+
+                    <hr>
+
+                    <!-- Usuarios activos -->
+                    <div id="usernames">
+                        
+                    </div>
+
                 </ul>
             </div>
+
+            <!-- Configuraciones y nuevo usuario -->
             <div id="bottom-bar">
-                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add
-                        contact</span></button>
+                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
+
         <div class="content">
+
+            <!-- Informacion del usuario con el que hablo -->
             <div class="contact-profile">
-                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                <p>User2</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Earth_Eastern_Hemisphere.jpg" alt="" />
+                <p>Talk to everybody</p>
                 <div class="social-media">
 
                 </div>
             </div>
+
+            <!-- Mesajes nuevos -->
             <div id="messages">
-                <ul>
-                    <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                        <p>Hello, how are you?.</p>
-                    </li>
-                </ul>
             </div>
 
+            <!-- Ingresar nuevos mensajes -->
             <div class="message-input">
                 <div class="wrap">
                     <form id="message-form">
                         <input autocomplete="off" type="text" id="message" placeholder="Write your message..." />
                         <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
                         <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    </form>
                 </div>
-                </form>
             </div>
+
         </div>
 
-    </div>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/main.js"></script>
+
 </body>
 
 </html>
