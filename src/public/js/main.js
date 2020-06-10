@@ -174,29 +174,52 @@ $(function () {
     //--------------------------------------------------------------------------------------------------------------
     //Mostrar mensajes
     function displayMsg(data) {
-        $classMessage = "";
-        $message = '<strong id="pname">'+data.nicksent+" : </strong>"+data.msg;
 
-        if (data.nicksent == $username && data.type == 0) {
-            $classMessage = "replies";            
-        } else if (data.nicksent != $username && data.type == 0) {
-            $classMessage = "sent"; 
-        } else if (data.nicksent == $username && data.type == 1){
-            $classMessage = "whisper-replies"; 
-            $message = '<ins id="pname">Private to '+data.nickreceive+"</ins> : "+data.msg;
-        } if (data.nickreceive == $username && data.type == 1){
-            $classMessage = "whisper-sent"; 
-            $message = '<ins id="pname">Private from '+data.nicksent+"</ins> : "+data.msg;
-        }
-
-        $chat.append(`
+        if (data.type == 0){
+            $chatmessage = '<strong id="pname">'+data.nicksent+" : </strong>"+data.msg;
+            if (data.nicksent == $username) {
+                $classchatMessage = "replies";            
+            } else {
+                $classchatMessage = "sent"; 
+            }
+            $chat.append(`
                 <ul>
-                    <li class="${$classMessage}">
+                    <li class="${$classchatMessage}">
                         <img src="./img/alt-user/${data.nicksent.charAt(0).toUpperCase()}.png" alt="" />
-                        <p>${$message}</p>
+                        <p>${$chatmessage}</p>
                     </li>
                 </ul>`
             );
+        }
+
+        if (data.type == 1){
+
+            if (data.nicksent == $username){
+                $classchatMessage = "whisper-replies"; 
+                $chatmessage = '<ins id="pname">Private to '+data.nickreceive+"</ins> : "+data.msg;
+                $chat.append(`
+                <ul>
+                    <li class="${$classchatMessage}">
+                        <img src="./img/alt-user/${data.nicksent.charAt(0).toUpperCase()}.png" alt="" />
+                        <p>${$chatmessage}</p>
+                    </li>
+                </ul>`
+            );
+            } else if (data.nickreceive == $username){
+                $classchatMessage = "whisper-sent"; 
+                $chatmessage = '<ins id="pname">Private from '+data.nicksent+"</ins> : "+data.msg;
+                $chat.append(`
+                <ul>
+                    <li class="${$classchatMessage}">
+                        <img src="./img/alt-user/${data.nicksent.charAt(0).toUpperCase()}.png" alt="" />
+                        <p>${$chatmessage}</p>
+                    </li>
+                </ul>`
+            );
+            }
+            
+        }
+        
     }
 
     //Si la ventana esat inectiva ejecutar notificacions
@@ -237,6 +260,8 @@ function privateChat(id){
     console.log(id);
     $('#message').val("");
     $('#message').val("/w "+id+" ");
+    $('#message').focus();
+
 }
 
 //Mostrar ocultar signUp y signDown
