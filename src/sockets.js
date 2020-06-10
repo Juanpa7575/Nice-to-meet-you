@@ -8,7 +8,7 @@ module.exports = io => {
     io.on('connection', async socket => {
         updateNicknames();
 
-        let messages = await Chat.find({}).limit(10).sort('-created');
+        let messages = await Chat.find({}).limit(50).sort('-created');
 
         // Add usuario a la sesion
         socket.on('new user', async(data, cb) => {
@@ -79,6 +79,19 @@ module.exports = io => {
                     var name = msg.substring(0, index);
                     console.log(name);
                     var msg = msg.substring(index + 1);
+                    var newMsg = new Chat({
+                        msg,
+                        type: 1,
+                        nicksent: socket.nickname,
+                        nickreceive: name
+                    });
+                    users[socket.nickname].emit('new message', {
+                        msg,
+                        type: 1,
+                        nicksent: socket.nickname,
+                        nickreceive: name
+                    });
+                    await newMsg.save();
                     if (name in users) {
                         users[name].emit('new message', {
                             msg,
@@ -86,21 +99,7 @@ module.exports = io => {
                             nicksent: socket.nickname,
                             nickreceive: name
                         });
-                        users[socket.nickname].emit('new message', {
-                            msg,
-                            type: 1,
-                            nicksent: socket.nickname,
-                            nickreceive: name
-                        });
-                        var newMsg = new Chat({
-                            msg,
-                            type: 1,
-                            nicksent: socket.nickname,
-                            nickreceive: name
-                        });
-                        await newMsg.save();
                     } else {
-                        cb('Error! Enter a valid User');
                     }
                 } else {
                     cb('Error! Please enter your message');
