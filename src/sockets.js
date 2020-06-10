@@ -29,7 +29,6 @@ module.exports = io => {
 
         // Create and Add usuario a la sesion
         socket.on('create user', async(data, cb) => {
-
             var newUser = new Users({
                 name: data.name,
                 email: data.email,
@@ -81,14 +80,25 @@ module.exports = io => {
                     console.log(name);
                     var msg = msg.substring(index + 1);
                     if (name in users) {
-                        users[name].emit('whisper', {
+                        users[name].emit('new message', {
                             msg,
-                            nick: socket.nickname
+                            type: 1,
+                            nicksent: socket.nickname,
+                            nickreceive: name
                         });
-                        users[socket.nickname].emit('whisper', {
+                        users[socket.nickname].emit('new message', {
                             msg,
-                            nick: socket.nickname
+                            type: 1,
+                            nicksent: socket.nickname,
+                            nickreceive: name
                         });
+                        var newMsg = new Chat({
+                            msg,
+                            type: 1,
+                            nicksent: socket.nickname,
+                            nickreceive: name
+                        });
+                        await newMsg.save();
                     } else {
                         cb('Error! Enter a valid User');
                     }
@@ -97,14 +107,16 @@ module.exports = io => {
                 }
             } else {
                 var newMsg = new Chat({
-                    msg,
-                    nick: socket.nickname
+                    msg: msg,
+                    type: 0,
+                    nicksent: socket.nickname
                 });
                 await newMsg.save();
 
                 io.sockets.emit('new message', {
                     msg,
-                    nick: socket.nickname
+                    type: 0,
+                    nicksent: socket.nickname
                 });
             }
         });

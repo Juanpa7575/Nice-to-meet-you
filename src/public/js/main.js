@@ -78,25 +78,29 @@ $(function () {
                 avatar: $newnickname.val().charAt(0).toUpperCase()
             }
     
-            console.log($userinfo);
-    
             socket.emit('create user', $userinfo, data => {
                 if (data) {
-                    $username = $nickname.val();
+                    $username = $newnickname.val();
                     $('#nickWrap').hide();
                     $('#frame').show();
                     $('#message').focus();
                     $nickuser.text($username);
-                    $imguser.attr("src", "./img/alt-user/" + $userinfo + ".png");
+                    $imguser.attr("src", "./img/alt-user/" + $userinfo.avatar + ".png");
                     progressbar();
                 } else {
                     $nickError2.html(`
-                <div class="alert alert-danger">
-                    That username already Exists.
-                </div>
-                `);
+                    <div class="alert alert-danger">
+                        That username already Exists.
+                    </div>
+                    `);
                 }
             });
+        }else{
+            $nickError2.html(`
+            <div class="alert alert-danger">
+                That username already Exists.
+            </div>
+            `);
         }
     });
 
@@ -140,14 +144,14 @@ $(function () {
             if (data[i] == $username) {
             } else {
                 html += `
-                <div id="${data[i]}">
+                <div onclick="privateChat('${data[i]}')" id="${data[i]}">
                     <li class="contact">
                         <div class="wrap">
                             <span class="contact-status online"></span>
                             <img src="./img/alt-user/${data[i].charAt(0).toUpperCase()}.png" alt="" />
                             <div class="meta">
                                 <p class="name">${data[i]}</p>
-                                <p class="preview">Chat with me!!</p>
+                                <p classprivateChat="preview">Click to sent a private message!!</p>
                             </div>
                         </div>
                     </li>
@@ -157,30 +161,6 @@ $(function () {
 
         }
         $users.html(html);
-    });
-
-    //Mesajes privados en grupo
-    socket.on('whisper', data => {
-        if (data.nick == $username) {
-            $chat.append(`
-                <ul>
-                    <li class="whisper-replies">
-                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
-                        <p><strong>Private from ${data.nick} : </strong>${data.msg}</p>
-                    </li>
-                </ul>`
-            );
-        } else {
-            $chat.append(`
-                <ul>
-                    <li class="whisper-sent">
-                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
-                        <p><strong>Private from ${data.nick} : </strong>${data.msg}</p>
-                    </li>
-                </ul>`
-            );
-        }
-        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
     });
 
     //Cargar mensajes antiguos
@@ -194,32 +174,36 @@ $(function () {
     //--------------------------------------------------------------------------------------------------------------
     //Mostrar mensajes
     function displayMsg(data) {
-        if (data.nick == $username) {
-            $chat.append(`
-                <ul>
-                    <li class="replies">
-                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
-                        <p><strong>${data.nick} :</strong> ${data.msg}</p>
-                    </li>
-                </ul>`
-            );
-        } else {
-            $chat.append(`
-                <ul>
-                    <li class="sent">
-                        <img src="./img/alt-user/${data.nick.charAt(0).toUpperCase()}.png" alt="" />
-                        <p><strong>${data.nick} : </strong>${data.msg}</p>
-                    </li>
-                </ul>`
-            );
+        $classMessage = "";
+        $message = '<strong id="pname">'+data.nicksent+" : </strong>"+data.msg;
+
+        if (data.nicksent == $username && data.type == 0) {
+            $classMessage = "replies";            
+        } else if (data.nicksent != $username && data.type == 0) {
+            $classMessage = "sent"; 
+        } else if (data.nicksent == $username && data.type == 1){
+            $classMessage = "whisper-replies"; 
+            $message = '<ins id="pname">Private to '+data.nickreceive+"</ins> : "+data.msg;
+        } if (data.nickreceive == $username && data.type == 1){
+            $classMessage = "whisper-sent"; 
+            $message = '<ins id="pname">Private from '+data.nicksent+"</ins> : "+data.msg;
         }
+
+        $chat.append(`
+                <ul>
+                    <li class="${$classMessage}">
+                        <img src="./img/alt-user/${data.nicksent.charAt(0).toUpperCase()}.png" alt="" />
+                        <p>${$message}</p>
+                    </li>
+                </ul>`
+            );
     }
 
     //Si la ventana esat inectiva ejecutar notificacions
     function notificacion(data) {
         if (unfocus == true) {
             $('#chatAudio')[0].play();
-            var title = data.nick
+            var title = data.nicksent
             var extra = {
                 icon: "https://stackoverrun.com/src/images/fivicon.png",
                 body: data.msg
@@ -247,6 +231,13 @@ function progressbar() {
     }
         , 1000);
 };
+
+//chat privado
+function privateChat(id){
+    console.log(id);
+    $('#message').val("");
+    $('#message').val("/w "+id+" ");
+}
 
 //Mostrar ocultar signUp y signDown
 $("#signInToggle").click(function (event) {

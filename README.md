@@ -1,15 +1,30 @@
 # Nice to meet you
-is a simple chat that was built with entire javascript technologies, for the frontend, backend and database. 
+Chat principalmente en javascript para frontend, backend and database. Pensado para permitir que las personas que desean practicar su ingles y conocer otras personas con gustos afines y con el deseo de aprender este idioma tan indispensable para nuestro campo.
 
 ![](docs/Nice-to-meet-you.png)
 
-# Used Technologies
+# Susurros en el chat global
+Es importante mantener un sistema que permita comunicar mensajes cortos con las personas mas.
+
+![](docs/chatPrivado0.jpg)
+![](docs/chatPrivado1.png)
+![](docs/chatPrivado2.png)
+
+# ¿Como instalarlo?
+Es tan simple como clonar o descargar el proyecto y ejecutar:
+
+- npm install
+- npm run start 
+
+# ¿Que tecnologias se emplearon?
+- Html
+- Css
+- javascript
 - Nodejs
   - Express
   - Socket.io
 - Mongodb
 
-# Links and Resources used in this project
+# Links de recursos adicionales
 - [Bootstrap4 CDN](http://getbootstrap.com/docs/4.0/getting-started/introduction/)
-- [Background Gradient Color](https://uigradients.com/#Lawrencium)
 - [jQuery CDN](https://code.jquery.com/)

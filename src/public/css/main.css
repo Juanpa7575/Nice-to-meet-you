@@ -30,6 +30,10 @@ body {
   font-style: italic;
 }
 
+#pname {
+  font-weight: 800;
+}
+
 #signUp{
   display: none;
 }
