@@ -8,7 +8,7 @@ Es importante mantener un sistema que permita comunicar mensajes cortos con las 
 
 ![](docs/chatPrivado0.jpg)
 ![](docs/chatPrivado1.png)
-![](docs/chatPrivado2.png)
+![](docs/ChatPrivado2.png)
 
 # ¿Como instalarlo?
 Es tan simple como clonar o descargar el proyecto y ejecutar:
