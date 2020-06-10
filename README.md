@@ -7,10 +7,8 @@ Chat principalmente en javascript para frontend, backend and database. Pensado p
 Es importante mantener un sistema que permita comunicar mensajes cortos con las personas mas.
 
 ![](docs/chatPrivado0.jpg)
-
 ![](docs/chatPrivado1.png)
-
-![](docs/chatPrivado2.png)
+![](docs/ChatPrivado2.png)
 
 # ¿Como instalarlo?
 Es tan simple como clonar o descargar el proyecto y ejecutar:
