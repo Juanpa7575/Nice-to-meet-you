@@ -16,6 +16,10 @@ Es tan simple como clonar o descargar el proyecto y ejecutar:
 - npm install
 - npm run start 
 
+# Muestra del proyecto
+
+https://nicetometyou.herokuapp.com/
+
 # ¿Que tecnologias se emplearon?
 - Html
 - Css
